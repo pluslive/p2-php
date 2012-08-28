@@ -353,8 +353,8 @@ if ($flags & P2_EDIT_CONF_USER_SKIPPED) {
         array('ngaborn_frequent_num', '頻出IDあぼーんのしきい値 (出現回数がこれ以上のIDをあぼーん)'),
         array('ngaborn_frequent_dayres', '勢いの速いスレでは頻出IDあぼーんしない<br>(総レス数/スレ立てからの日数、0なら無効)'),
         array('ngaborn_chain', '連鎖NGあぼーん<br>「する」ならあぼーんレスへのレスはあぼーん、NGレスへのレスはNG。<br>「すべてNGにする」の場合、あぼーんレスへのレスもNGにする。'),
-        array('ngaborn_chain_all', '表示範囲外のレスも連鎖NGあぼーんの対象にする<br>(処理を軽くするため、デフォルトではしない)'),
-        array('ngaborn_daylimit', 'この期間、NGあぼーんにHITしなければ、登録ワードを自動的に外す (日数)'),
+        array('ngaborn_chain_all', '表示範囲外のレスも連鎖NG/あぼーん/ハイライトの対象にする<br>(処理を軽くするため、デフォルトではしない)'),
+        array('ngaborn_daylimit', 'この期間、NG/あぼーん/ハイライトにHITしなければ、登録ワードを自動的に外す (日数)'),
         array('ngaborn_purge_aborn', 'あぼーんレスは不可視divブロックも描画しない'),
     );
     printEditConfGroupHtml($groupname, $conflist, $flags);
@@ -571,8 +571,8 @@ if ($flags & P2_EDIT_CONF_USER_SKIPPED) {
     $conflist = array(
         array('expack.spm.kokores', 'ここにレス'),
         array('expack.spm.kokores_orig', 'ここにレスで開くフォームに元レスの内容を表示する'),
-        array('expack.spm.ngaborn', 'あぼーんワード・NGワード登録'),
-        array('expack.spm.ngaborn_confirm', 'あぼーんワード・NGワード登録時に確認する'),
+        array('expack.spm.ngaborn', 'あぼーん/NG/ハイライトワード登録'),
+        array('expack.spm.ngaborn_confirm', 'あぼーん/NG/ハイライトワード登録時に確認する'),
         array('expack.spm.filter', 'フィルタリング'),
         array('expack.spm.filter_target', 'フィルタリング結果を開くフレームまたはウインドウ'),
     );
@@ -817,6 +817,78 @@ if (!$_conf['ktai']) {
     echo <<<EOP
 </div><!-- end of tab -->
 </div><!-- end of child tabset "拡張パック設定" -->
+
+<div class="tabbertab" title="+live設定">
+<h3>+live設定</h3>
+<div class="tabber">\n
+EOP;
+}
+
+// {{{ +live設定
+// {{{ +live - 表示設定
+
+$groupname = '表示設定';
+$groups[] = $groupname;
+$flags = getGroupShowFlags($groupname);
+if ($flags & P2_EDIT_CONF_USER_SKIPPED) {
+	$keep_old = true;
+} else {
+	$conflist = array(
+		array('live.view_type', 'レス表示の種類'),
+		array('live.id_b', 'ID末尾の O (携帯) P (公式p2) Q (フルブラウザ) i (iPhone)を太字に'),
+		array('live.highlight_chain', '連鎖ハイライト (連鎖範囲は ngaborn_chain_all にて設定)'),
+		array('live.youtube_winsize', 'YouTubeプレビュー表示のサイズ'),
+	);
+	printEditConfGroupHtml($groupname, $conflist, $flags);
+}
+
+// }}}
+// {{{ +live - 実況中設定
+
+$groupname = '実況中設定';
+$groups[] = $groupname;
+$flags = getGroupShowFlags($groupname);
+if ($flags & P2_EDIT_CONF_USER_SKIPPED) {
+	$keep_old = true;
+} else {
+	$conflist = array(
+		array('live.before_respointer', '表示するレス数 (100以下推奨)'),
+		array('live.post_width', '下部書込フレームの高さ (px)'),
+		array('live.bbs_noname', 'デフォルトの名無しの表示'),
+		array('live.mail_sage', 'sage を ▼ に'),
+		array('live.msg', '全ての改行とスペースの削除'),
+		array('live.res_button', '[これにレス] の方法'),
+		array('live.write_regulation', '書込規制用タイマー'),
+		array('live.ic2_onoff', 'ImageCache2のサムネイル作成'),
+	);
+	printEditConfGroupHtml($groupname, $conflist, $flags);
+}
+
+// }}}
+// {{{ +live - リロード/スクロール
+
+$groupname = 'リロード/スクロール';
+$groups[] = $groupname;
+$flags = getGroupShowFlags($groupname);
+if ($flags & P2_EDIT_CONF_USER_SKIPPED) {
+	$keep_old = true;
+} else {
+	$conflist = array(
+		array('live.reload_time', 'オートリロードの間隔'),
+		array('live.scroll_move', 'オートスクロールの滑らかさ (最も滑らか 1 、スクロール無し 0)'),
+		array('live.scroll_speed', 'オートスクロールの速度<br> (最速 1 、スクロール無しの場合は上の滑らかさの値を 0 に)'),
+	);
+	printEditConfGroupHtml($groupname, $conflist, $flags);
+}
+
+// }}}
+// }}}
+
+// PC用表示
+if (empty($_conf['ktai'])) {
+	echo <<<EOP
+</div><!-- end of tab -->
+</div><!-- end of child tabset "+live" -->
 </div><!-- end of parent tabset -->\n
 EOP;
 // 携帯用表示
@@ -848,6 +920,8 @@ EOP;
         if ($_conf['iphone']) {
             if ($groupname == 'tGrep') {
                 echo '</optgroup><optgroup label="拡張パック設定">';
+            } elseif ($groupname == '表示設定') {
+                echo '</optgroup><optgroup label="+live設定">';
             } elseif ($groupname == 'subject-i') {
                 echo '</optgroup><optgroup label="iPhone設定">';
             }

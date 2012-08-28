@@ -153,12 +153,7 @@ $aThread->setTitleFromLocal();
 if ($_conf['ktai']) {
     $before_respointer = $_conf['mobile.before_respointer'];
 } else {
-	// +live レス表示数切替
-	if ($_GET['live']) {
-		$before_respointer = $_conf['live.before_respointer'];
-	} else {
     $before_respointer = $_conf['before_respointer'];
-	}
 }
 
 // 取得済みなら
@@ -189,12 +184,7 @@ if ($aThread->isKitoku()) {
 // 未取得なら
 } else {
     if (!$aThread->ls) {
-		// +live レス表示数切替
-		if ($_GET['live']) {
-			$aThread->ls = l .$_conf['live.before_respointer'];
-		} else {
         $aThread->ls = $_conf['get_new_res_l'];
-		}
     }
 }
 
@@ -270,13 +260,8 @@ if ($_conf['ktai']) {
 
 } else {
 
-	// +live ヘッダ切替
-	if ($_GET['live']) {
-		P2Util::header_content_type();
-	} else {
     // ヘッダ 表示
     include READ_HEADER_INC_PHP;
-	}
     flush();
 
     //===========================================================
@@ -299,6 +284,7 @@ if ($_conf['ktai']) {
 
     if ($aThread->rescount) {
         $mainhtml = '';
+		require_once P2_LIB_DIR . '/live/live_ShowThreadPc.php';
         $aShowThread = new ShowThreadPc($aThread);
 
         if ($_conf['expack.spm.enabled']) {
@@ -412,17 +398,8 @@ EOP;
         }
     }
 
-	// +live フッタ切替
-	if ($_GET['live']) {
-		echo <<<LIVE
-		<link rel="stylesheet" href="css.php?css=style&amp;skin={$skin_en}" type="text/css">
-		<link rel="stylesheet" href="css.php?css=read&amp;skin={$skin_en}" type="text/css">
-		<script type="text/javascript" src="js/htmlpopup.js?{$_conf['p2expack']}"></script>
-LIVE;
-	} else {
     // フッタ 表示
     include READ_FOOTER_INC_PHP;
-	}
 }
 flush();
 

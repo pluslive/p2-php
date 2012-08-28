@@ -28,6 +28,10 @@ $writable_files = array(
     'p2_ng_id.txt'        => 'NGID',
     'p2_aborn_be.txt'     => 'あぼーんBE',
     'p2_ng_be.txt'        => 'NGBE',
+	'p2_highlight_name.txt' => 'ハイライトネーム',
+	'p2_highlight_mail.txt' => 'ハイライトメール',
+	'p2_highlight_msg.txt'  => 'ハイライトメッセージ',
+	'p2_highlight_id.txt'   => 'ハイライトID',
 );
 
 if (!array_key_exists($filename, $writable_files)) {
@@ -221,7 +225,7 @@ if ($filename == 'p2_aborn_thread.txt') {
 $usage = <<<EOP
 <ul>
 <li>×: 削除</li>
-<li>ワード: NG/あぼーんワード (空にすると登録解除)</li>
+<li>ワード: NG/あぼーん/ハイライトワード (空にすると登録解除)</li>
 <li>i: 大文字小文字を無視</li>
 <li>re: 正規表現</li>
 <li>板: newsplus,software 等 (完全一致, カンマ区切り)</li>

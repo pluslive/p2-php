@@ -502,6 +502,11 @@ include P2_CONFIG_DIR . '/conf_user_def_i.inc.php';
 include P2_CONFIG_DIR . '/conf_user_def_wiki.inc.php';
 
 // }}}
+// {{{ +live
+
+include P2_CONFIG_DIR . '/conf_user_def_live.inc.php';
+
+// }}}
 
 /*
  * Local Variables:

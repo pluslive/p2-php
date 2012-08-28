@@ -104,7 +104,12 @@ $read_navi_next = "<a href=\"{$_conf['read_php']}?{$host_bbs_key_q}&amp;ls={$aTh
 // $read_footer_navi_new  続きを読む 新着レスの表示
 
 if ($aThread->resrange['to'] == $aThread->rescount) {
+	// +live リンク切替
+	if ($_GET['live']) {
+		$read_footer_navi_new = "<a href=\"javascript:getIndex('./read.php?{$host_bbs_key_q}&live=1');\" accesskey=\"r\">{$shinchaku_st}</a>";
+	} else {
     $read_footer_navi_new = "<a href=\"{$_conf['read_php']}?{$host_bbs_key_q}&amp;ls={$aThread->rescount}-&amp;nt={$newtime}#r{$aThread->rescount}\" accesskey=\"r\">{$shinchaku_st}</a>";
+	}
 } else {
     $read_footer_navi_new = "<a href=\"{$_conf['read_php']}?{$host_bbs_key_q}&amp;ls={$aThread->resrange['to']}-{$offline_q}\" accesskey=\"r\">{$tuduki_st}</a>";
 }
@@ -197,23 +202,33 @@ echo <<<EOP
     <script type="text/javascript" src="js/delelog.js?{$_conf['p2_version_id']}"></script>\n
 EOP;
 
+// +live 実況表示 html popup 切換
+if ($_conf['live.view_type'] > 1 ) {
+	$live_view_popup = live_;
+}
+
 if ($_conf['iframe_popup_type'] == 1) {
     echo <<<EOP
     <script type="text/javascript" src="./js/yui-ext/yui.js"></script>
     <script type="text/javascript" src="./js/yui-ext/yui-ext-nogrid.js"></script>
     <link rel="stylesheet" type="text/css" href="./js/yui-ext/resources/css/resizable.css">
-    <script type="text/javascript" src="js/htmlpopup_resizable.js?{$_conf['p2_version_id']}"></script>
+    <script type="text/javascript" src="js/{$live_view_popup}htmlpopup_resizable.js?{$_conf['p2_version_id']}"></script>
 EOP;
 } else {
     echo <<<EOP
-    <script type="text/javascript" src="js/htmlpopup.js?{$_conf['p2_version_id']}"></script>
+    <script type="text/javascript" src="js/{$live_view_popup}htmlpopup.js?{$_conf['p2_version_id']}"></script>
 EOP;
 }
 
 if ($_conf['link_youtube'] == 2 || $_conf['link_niconico'] == 2) {
+	// +live YouTubeプレビュー表示のサイズ指定
+	if ($_conf['live.youtube_winsize'] == 1) {
+		echo "\t<script type=\"text/javascript\" src=\"js/preview_video_half.js?{$_conf['p2_version_id']}\"></script>\n";
+	} else {
     echo <<<EOP
     <script type="text/javascript" src="js/preview_video.js?{$_conf['p2_version_id']}"></script>\n
 EOP;
+	}
 }
 if ($_conf['expack.am.enabled']) {
     echo <<<EOP
@@ -298,6 +313,14 @@ if (empty($_GET['one'])) {
     $onload_script .= 'setWinTitle();';
 }
 
+// +live ページ読込時スクリプト
+if ($_GET['live']) {
+	$onload_script .= "startlive();";
+	$onUnload_script = "onUnload=\"stoplive();\"";
+} else {
+	$onload_script .= "";
+}
+
 if ($_conf['iframe_popup_type'] == 1) {
     $fade = empty($_GET['fade']) ? 'false' : 'true';
     $onload_script .= "gFade = {$fade};";
@@ -351,9 +374,12 @@ if (!empty($_SESSION['use_narrow_toolbars'])) {
 EOP;
 }
 
+// +live オートリロード+スクロール
+include_once P2_LIB_DIR . '/live/live_header.inc.php';
+
 echo <<<EOP
 </head>
-<body{$bodyadd}><div id="popUpContainer"></div>\n
+<body{$bodyadd} {$onUnload_script}><div id="popUpContainer"></div>\n
 EOP;
 
 P2Util::printInfoHtml();
@@ -425,6 +451,18 @@ if ($aThread->rescount && empty($_GET['renzokupop'])) {
 EOP;
 }
 
+// +live 実況フレーム 2ペインで開く
+if ($_GET['live']) {
+$htm['p2frame'] = <<<live
+<script type="text/javascript">
+//<![CDATA[
+if (top == self) {
+	<a href="live_frame.php?{$host_bbs_key_q}{$ttitle_en_q}{$rescount_q}{$word_q}{$anum_ht}">実況フレーム 2ペインで開く</a> |
+}
+//]]>
+</script>\n
+live;
+} else {
 // {{{ p2フレーム 3ペインで開く
 
 $htm['p2frame'] = <<<EOP
@@ -436,6 +474,7 @@ if (top == self) {
 //]]>
 </script>\n
 EOP;
+}
 
 // }}}
 

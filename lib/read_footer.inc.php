@@ -59,9 +59,16 @@ if ($aThread->rescount or (!empty($_GET['one']) && !$aThread->diedat)) { // and 
 <a href="{$motothre_url}" target="_blank">{$dores_st}</a>
 EOP;
         } else {
+			// +live リンク切替
+			if ($_GET['live']) {
+				$htm['dores'] = <<<LIVE
+				<a href="live_post_form.php?{$host_bbs_key_q}{$ttitle_en_q}" target='livepost'>{$dores_st}</a>
+LIVE;
+			} else {
             $htm['dores'] = <<<EOP
 <a href="post_form.php?{$host_bbs_key_q}&amp;rescount={$aThread->rescount}{$ttitle_en_q}" target="_self" onclick="return OpenSubWin('post_form.php?{$host_bbs_key_q}&amp;rescount={$aThread->rescount}{$ttitle_en_q}&amp;popup=1',{$STYLE['post_pop_size']},1,0)"{$onmouse_showform_ht}>{$dores_st}</a>
 EOP;
+			}
         }
 
         $res_form_ht_pb = $res_form_ht;
@@ -168,6 +175,23 @@ EOP;
 
 if ($_conf['expack.ic2.enabled']) {
     include P2EX_LIB_DIR . '/ImageCache2/templates/info.tpl.html';
+}
+ 
+// +live 表示切替スクリプト
+if ($_GET['live']) {
+	echo "";
+} else {
+	echo <<<LIVE
+	<script type="text/javascript">
+	<!--
+	function startlive() {
+		window.location.replace("./live_read.php?host={$aThread->host}&bbs={$aThread->bbs}&key={$aThread->key}&live=1");
+	}
+
+	parent.livecontrol.liveoff();
+	//-->
+	</script>\n
+LIVE;
 }
 
 // ====

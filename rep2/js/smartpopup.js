@@ -55,18 +55,21 @@ SPM.init = function (aThread) {
 
 	// ブックマーク (未実装)
 
-	// あぼーんワード・NGワード
+	// あぼーんワード・NGワード・ハイライトワード
 	if (opt[2] == 1 || opt[2] == 2) {
 		var abnId = threadId + '_ab';
 		var ngId = threadId + '_ng';
+		var highlightId = threadId + '_highlight';
 		spm.appendItem('あぼーんする', [aThread, 'info_sp.php', 'mode=aborn_res']);
 		spm.appendItem('あぼーんワード', null, abnId);
 		spm.appendItem('NGワード', null, ngId);
+		spm.appendItem('ハイライトワード', null, highlightId);
 		// サブメニュー生成
 		var spmAborn = SPM.createNgAbornSubMenu(abnId, aThread, 'aborn');
 		var spmNg = SPM.createNgAbornSubMenu(ngId, aThread, 'ng');
+		var spmHighlight = SPM.createNgAbornSubMenu(highlightId, aThread, 'highlight');
 	} else {
-		var spmAborn = false, spmNg = false;
+		var spmAborn = false, spmNg = false, spmHighlight = false;
 	}
 
 	// フィルタリング
@@ -120,6 +123,10 @@ SPM.init = function (aThread) {
 	// NGワード・サブメニューをコンテナに追加
 	if (spmNg) {
 		container.appendChild(spmNg);
+	}
+	// ハイライトワード・サブメニューをコンテナに追加
+	if (spmHighlight) {
+		container.appendChild(spmHighlight);
 	}
 	// フィルタリング・サブメニューをコンテナに追加
 	if (spmFilter) {

@@ -86,7 +86,7 @@ div.thread {
 div.res {
 	margin: 0 0 2.0em 0;
 	padding: 0;
-    width: 100%;
+    width: 99%;
     /*\*//*/
     overflow: hidden;
     /**/
@@ -331,6 +331,16 @@ div.res div.v_reslist ul {
     padding: 0;
 }
 div.res div.v_reslist ul li:first-letter {
+    color: #777;
+}
+/* +live ŽÀ‹µ•\Ž¦—p */
+table.res div.v_reslist ul {
+    list-style-type: none;
+    line-height: 0.75;
+    margin: 0;
+    padding: 0;
+}
+table.res div.v_reslist ul li:first-letter {
     color: #777;
 }
 

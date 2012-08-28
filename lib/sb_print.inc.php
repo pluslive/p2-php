@@ -361,6 +361,13 @@ EOP;
         }
         $thre_url = "{$_conf['read_php']}?{$host_bbs_key_q}{$rescount_q}{$offline_q}{$word_q}{$anum_ht}";
 
+		// +live リンク表示切替
+		$ttitle_en = UrlSafeBase64::encode($aThread->ttitle);
+		$ttitle_urlen = rawurlencode($ttitle_en);
+		$ttitle_en_q ="&amp;ttitle_en=".$ttitle_urlen;
+
+		$live_url = "live_frame.php?{$host_bbs_key_q}&amp;live=1{$ttitle_en_q}{$rescount_q}{$anum_ht}";
+
         // オンリー>>1
         if ($only_one_bool) {
             $td['one'] = <<<EOP
@@ -437,11 +444,19 @@ EOP;
         // スレッド一覧 table ボディ HTMLプリント <tr></tr>
         //====================================================================================
 
+		// +live 実況中ic2のサムネイル作成をonoff
+		if ($_conf['expack.ic2.enabled']
+		&& (!$_conf['live.ic2_onoff'])) {
+			$live_ic2_off = "onclick=\"javascript:parent.menu.ic2_menu_switch(0);\"";
+		}
+
         // ボディ
         echo <<<EOR
 <tr class="{$row_class}">
 {$td['edit']}{$td['offrec']}{$td['unum']}{$td['rescount']}{$td['one']}{$td['checkbox']}<td{$class_to}>{$torder_ht}</td>
-<td{$class_tl}><div class="el">{$moto_thre_ht}<a id="tt{$i}" href="{$thre_url}" class="{$title_class}">{$ttitle_ht}</a></div></td>
+<td{$class_tl}><div class="el">{$moto_thre_ht}
+<a href="{$live_url}" title="別窓で実況" target="_blank" {$live_ic2_off}><img src ="./img/live.png" alt="+live"></a>&nbsp;
+<a id="tt{$i}" href="{$thre_url}" class="{$title_class}">{$ttitle_ht}</a></div></td>
 {$td['ita']}{$td['spd']}{$td['ikioi']}{$td['birth']}{$td['fav']}</tr>\n
 EOR;
 

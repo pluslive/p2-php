@@ -127,23 +127,33 @@ echo <<<EOHEADER
     <script type="text/javascript" src="js/delelog.js?{$_conf['p2_version_id']}"></script>\n
 EOHEADER;
 
+// +live 実況表示 html popup 切換
+if ($_conf['live.view_type'] > 1 ) {
+	$live_view_popup = live_;
+}
+
 if ($_conf['iframe_popup_type'] == 1) {
     echo <<<EOP
     <script type="text/javascript" src="./js/yui-ext/yui.js"></script>
     <script type="text/javascript" src="./js/yui-ext/yui-ext-nogrid.js"></script>
     <link rel="stylesheet" type="text/css" href="./js/yui-ext/resources/css/resizable.css">
-    <script type="text/javascript" src="js/htmlpopup_resizable.js?{$_conf['p2_version_id']}"></script>
+    <script type="text/javascript" src="js/{$live_view_popup}htmlpopup_resizable.js?{$_conf['p2_version_id']}"></script>
 EOP;
 } else {
     echo <<<EOP
-    <script type="text/javascript" src="js/htmlpopup.js?{$_conf['p2_version_id']}"></script>
+    <script type="text/javascript" src="js/{$live_view_popup}htmlpopup.js?{$_conf['p2_version_id']}"></script>
 EOP;
 }
 
 if ($_conf['link_youtube'] == 2 || $_conf['link_niconico'] == 2) {
+	// +live YouTubeプレビュー表示のサイズ指定
+	if ($_conf['live.youtube_winsize'] == 1) {
+		echo "\t<script type=\"text/javascript\" src=\"js/preview_video_half.js?{$_conf['p2_version_id']}\"></script>\n";
+	} else {
     echo <<<EOP
     <script type="text/javascript" src="js/preview_video.js?{$_conf['p2_version_id']}"></script>\n
 EOP;
+	}
 }
 if ($_conf['expack.am.enabled']) {
     echo <<<EOP

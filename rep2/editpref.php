@@ -174,6 +174,11 @@ $ng_id_txt          = 'p2_ng_id.txt';
 // +Wiki
 $aborn_be_txt       = 'p2_aborn_be.txt';
 $ng_be_txt          = 'p2_ng_be.txt';
+// +live ハイライトワード用
+$highlight_name_txt = 'p2_highlight_name.txt';
+$highlight_mail_txt = 'p2_highlight_mail.txt';
+$highlight_msg_txt  = 'p2_highlight_msg.txt';
+$highlight_id_txt   = 'p2_highlight_id.txt';
 
 echo '<div>';
 echo <<<EOP
@@ -260,6 +265,25 @@ EOP;
     echo "</td></tr>";
 
     // }}}
+	// {{{ PC - +live ハイライトワード編集
+
+	echo "<td>\n\n";
+
+	echo <<<EOP
+<fieldset>
+<legend>ハイライトワード編集</legend>\n
+EOP;
+	printEditFileForm($highlight_name_txt, '名前');
+	printEditFileForm($highlight_mail_txt, 'メール');
+	printEditFileForm($highlight_msg_txt, '本文');
+	printEditFileForm($highlight_id_txt, 'ID');
+	echo <<<EOP
+</fieldset>\n
+EOP;
+
+	echo "</td></tr>";
+
+	// }}}
     // {{{ PC - ホストの同期 HTMLのセット
 
     echo <<<EOP
@@ -508,7 +532,7 @@ function printEditFileForm($filename, $submit_value)
 
     // +Wiki
     if ($filename == 'p2_aborn_thread.txt' ||
-        preg_match('/^p2_(aborn|ng)_(name|mail|id|msg|be)\\.txt$/', $filename))
+        preg_match('/^p2_(aborn|ng|highlight)_(name|mail|id|msg)\\.txt$/', $filename))
     {
         $edit_php = 'edit_aborn_word.php';
         $target = '_self';

@@ -65,14 +65,6 @@ abstract class ShowThread
     const NG_CHAIN = 32;
     const NG_AA = 64;
 
-	// +live ハイライトワード用
-	const HIGHLIGHT_NONE = 128;
-	const HIGHLIGHT_NAME = 256;
-	const HIGHLIGHT_MAIL = 512;
-	const HIGHLIGHT_ID = 1024;
-	const HIGHLIGHT_MSG = 2048;
-	const HIGHLIGHT_CHAIN = 4096;
-
     // }}}
     // {{{ static properties
 
@@ -96,9 +88,6 @@ abstract class ShowThread
      * @var int
      */
     static protected $_ngaborns_body_hits = 0;
-
-	static protected $_highlight_head_hits = 0; // 本文以外がハイライトにヒットした総数
-	static protected $_highlight_body_hits = 0; // 本文がハイライトにヒットした総数
 
     /**
      * getAnchorRegex() のキャッシュ
@@ -162,9 +151,6 @@ abstract class ShowThread
      */
     protected $_aborn_nums;
     protected $_ng_nums;
-
-	protected $_highlight_nums; // ハイライトレス番号を格納する配列
-	protected $_highlight_msgs; // ハイライトメッセージを格納する配列
 
     /**
      * リダイレクタの種類
@@ -336,9 +322,6 @@ abstract class ShowThread
         $this->_has_ngaborns = false;
         $this->_aborn_nums = array();
         $this->_ng_nums = array();
-
-		$this->_highlight_nums = array();
-		$this->_highlight_msgs = array();
 
         if (P2Util::isHostBbsPink($this->thread->host)) {
             $this->_redirector = self::REDIRECTOR_PINKTOWER;
@@ -521,6 +504,11 @@ abstract class ShowThread
         if ($do_filtering && !$is_ktai) {
             $buf['body'] .= "<script type=\"text/javascript\">filterCount({$filter_hits});</script>\n";
         }
+
+// +live オートリロードされるスレ内容の表示部
+echo <<<LIVE
+\n<div id="live_view"></div>\n
+LIVE;
 
         if (!$is_fragment) {
             $buf['body'] .= "</div>\n";
@@ -712,7 +700,7 @@ abstract class ShowThread
      */
     protected function _ngAbornCheck($i, $name, $mail, $date_id, $id, $msg, $nong = false, &$info = null)
     {
-        global $_conf, $ngaborns_hits, $highlight_msgs, $highlight_chain_nums;
+        global $_conf, $ngaborns_hits;
 
         $info = array();
         $type = self::NG_NONE;
@@ -835,9 +823,6 @@ abstract class ShowThread
                               p2h($a_ng_msg));
         }
 
-		// +live ハイライトチェック
-		include P2_LIB_DIR . '/live/live_highlight_check.php';
-
         // }}}
 
         return $type;
@@ -878,26 +863,6 @@ abstract class ShowThread
     }
 
     // }}}
-	// {{{ _markHighlight()
-
-	// +live ハイライトにヒットしたレス番号を記録する
-	protected function _markHighlight($num, $type, $isBody)
-	{
-		if ($type) {
-			if ($isBody) {
-				self::$_highlight_body_hits++;
-			} else {
-				self::$_highlight_head_hits++;
-			}
-
-			$str = (string)$num;
-			$this->_highlight_nums[$num] = $str;
-		}
-
-		return $type;
-	}
-
-	// }}}
     // {{{ ngAbornCheck()
 
     /**
@@ -1066,7 +1031,6 @@ abstract class ShowThread
     {
         if (P2_MBREGEX_AVAILABLE) {
             $msg = mb_ereg_replace('(?:[\\s　]*<br>)+[\\s　]*$', '', $msg);
-			$msg = mb_ereg_replace('(?:^[\\s　]*<br>)+[\\s　]*', '', $msg);
             $msg = mb_ereg_replace('(?:[\\s　]*<br>){3,}', $replacement, $msg);
         } else {
             mb_convert_variables('UTF-8', 'CP932', $msg, $replacement);

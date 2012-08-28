@@ -167,6 +167,19 @@ $STYLE['respop_b_style'] = "dotted"; // ("solid") レスポップアップのボーダー形式
 $STYLE['info_pop_size'] = "600,380"; // ("600,380") 情報ポップアップウィンドウの大きさ（横,縦）
 
 // }}}
+// {{{ +live 実況モード
+
+$STYLE['live_b_l'] = "1px #999 dotted"; // ("1px #999 dotted") +live レス間の仕切線
+$STYLE['live_b_s'] = "1px #999 dotted"; // ("1px #999 dotted") +live 番号 目欄 名前 日付 ID 表示部とレス表示部の仕切線
+$STYLE['live_b_n'] = "2px ForestGreen dotted"; // ("2px ForestGreen dotted") +live 実況表示&オートリロード時の既読～新着の仕切線
+$STYLE['live_highlight'] = "#cff"; // ("#cff") +live ハイライトワード表示時の背景色
+$STYLE['live_highlight_chain'] = "#ffc"; // ("#ffc") +live 連鎖ハイライト表示時の背景色
+$STYLE['live_highlight_word_weight'] = "bold"; // ("bold") +live 連鎖ハイライト表示時のフォントの太さ
+$STYLE['live_highlight_word_border'] = "3px ForestGreen double"; // ("3px ForestGreen double") +live 連鎖ハイライト表示時のアンダーライン
+$STYLE['live_font-size'] = "10px"; // ("10px") +live 番号 目欄 名前 日付 ID 欄のフォントサイズ
+$STYLE['live2_color'] = "#fff3c2"; // ("#fff3c2") +live Type-Bの 番号 目欄 名前 日付 ID 表示部の背景色
+
+// }}}
 
 /*
  * Local Variables:

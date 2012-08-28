@@ -20,6 +20,11 @@ $GLOBALS['ngaborns_hits'] = array(
     'ng_mail'       => 0,
     'ng_msg'        => 0,
     'ng_name'       => 0,
+	'highlight_chain' => 0,
+	'highlight_id'    => 0,
+	'highlight_mail'  => 0,
+	'highlight_msg'   => 0,
+	'highlight_name'  => 0,
 );
 
 // }}}
@@ -172,6 +177,11 @@ class NgAbornCtl
         // +Wiki
         $ngaborns['aborn_be'] = self::_readNgAbornFromFile('p2_aborn_be.txt');
         $ngaborns['ng_be'] = self::_readNgAbornFromFile('p2_ng_be.txt');
+		// +live
+		$ngaborns['highlight_name'] = self::_readNgAbornFromFile('p2_highlight_name.txt');
+		$ngaborns['highlight_mail'] = self::_readNgAbornFromFile('p2_highlight_mail.txt');
+		$ngaborns['highlight_msg'] = self::_readNgAbornFromFile('p2_highlight_msg.txt');
+		$ngaborns['highlight_id'] = self::_readNgAbornFromFile('p2_highlight_id.txt');
 
         return $ngaborns;
     }

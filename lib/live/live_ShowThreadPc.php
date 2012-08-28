@@ -3,6 +3,7 @@
  * rep2 - スレッドを表示する クラス PC用
  */
 
+require_once P2_LIB_DIR . '/live/live_ShowThread.php';
 require_once P2EX_LIB_DIR . '/ExpackLoader.php';
 
 ExpackLoader::loadAAS();
@@ -13,8 +14,6 @@ ExpackLoader::loadImageCache();
 
 class ShowThreadPc extends ShowThread
 {
-	var $BBS_NONAME_NAME = ''; // +live (live.bbs_noname) 用
-
     // {{{ properties
 
     static private $_spm_objects = array();
@@ -46,20 +45,6 @@ class ShowThreadPc extends ShowThread
             'plugin_linkThread',
             'plugin_link2chSubject',
         );
-
-		// +live (live.bbs_noname) 用
-		if ($_GET['live']) {
-			if (empty($_conf['live.bbs_noname'])) {
-				require_once P2_LIB_DIR . '/SettingTxt.php';
-				$st = new SettingTxt($this->thread->host, $this->thread->bbs);
-				$st->setSettingArray();
-				if (!empty($st->setting_array['BBS_NONAME_NAME'])) {
-					$this->BBS_NONAME_NAME = $st->setting_array['BBS_NONAME_NAME'];
-				}
-			}
-
-		}
-
         // +Wiki
         if (isset($GLOBALS['linkPluginCtl'])) {
             $this->_url_handlers[] = 'plugin_linkPlugin';
@@ -134,7 +119,7 @@ class ShowThreadPc extends ShowThread
      */
     public function transRes($ares, $i, $pattern = null)
     {
-        global $_conf, $STYLE, $mae_msg, $highlight_msgs, $highlight_chain_nums;
+        global $_conf, $STYLE, $mae_msg;
 
         list($name, $mail, $date_id, $msg) = $this->thread->explodeDatLine($ares);
         if (($id = $this->thread->ids[$i]) !== null) {
@@ -152,11 +137,6 @@ class ShowThreadPc extends ShowThread
             $date_id = $replaceWordCtl->replace('date', $this->thread, $ares, $i);
             $msg     = $replaceWordCtl->replace('msg',  $this->thread, $ares, $i);
         }
-
-		// +live (live.bbs_noname) 用 
-		if (!empty($this->BBS_NONAME_NAME) and $this->BBS_NONAME_NAME == $name) {
-			$name = '';
-		}
 
         $tores = '';
         $rpop = '';
@@ -178,12 +158,6 @@ class ShowThreadPc extends ShowThread
             $ngaborns_head_hits = self::$_ngaborns_head_hits;
             $ngaborns_body_hits = self::$_ngaborns_body_hits;
         }
-
-		// +live ハイライトチェック
-		if ($ng_type != self::HIGHLIGHT_NONE) {
-			$highlight_head_hits = self::$_highlight_head_hits;
-			$highlight_body_hits = self::$_highlight_body_hits;
-		}
 
         // AA判定
         if ($this->am_autodetect && $this->activeMona->detectAA($msg)) {
@@ -267,9 +241,6 @@ EOMSG;
 
         }
 
-		// +live ハイライトワード変換
-		include P2_LIB_DIR . '/live/live_highlight_convert.php';
-
         /*
         //「ここから新着」画像を挿入
         if ($i == $this->thread->readnum +1) {
@@ -287,8 +258,7 @@ EOP;
             $spmeh = '';
         }
 
-		// +live スレッド内容表示切替
-		include P2_LIB_DIR . '/live/live_view_ctl.inc.php';
+		// +live スレ内容表示部削除
 
         /*if ($_conf['expack.am.enabled'] == 2) {
             $tores .= <<<EOJS
@@ -417,14 +387,9 @@ EOJS;
         // $toresにまとめて出力
         $tores .= '<div class="res-header">';
         $tores .= "<span class=\"spmSW\"{$spmeh}>{$i}</span> : "; // 番号
-        $tores .= preg_replace('{<b>[ ]*</b>}i', '', "<b class=\"name\">{$name}</b> : ");
+        $tores .= preg_replace('{<b>[ ]*</b>}i', '', "<b>{$name}</b> : ");
         if ($mail) {
-            // メール
-			if (preg_match ("(^[\\s　]*sage[\\s　]*$)", $mail)) {
-				$tores .= "<span class=\"sage\">$mail</span>"." ：";
-			} else {
-				$tores .= "<span class=\"mail\">$mail</span>"." ：";
-			}
+            $tores .= $mail . ' : '; // メール
         }
         $tores .= $date_id; // 日付とID
         if ($this->am_side_of_id) {
@@ -1314,13 +1279,6 @@ EOJS;
     {
         global $_conf;
 
-		// +live YouTubeプレビュー表示のサイズ指定
-		if ($_conf['live.youtube_winsize'] == 1) {
-			$youtube_winsize = "width=\"212\" height=\"175\""; // ハーフ
-		} else {
-			$youtube_winsize = "width=\"425\" height=\"350\""; // ノーマル
-		}
-
         // http://www.youtube.com/watch?v=Mn8tiFnAUAI
         // http://m.youtube.com/watch?v=OhcX0xJsDK8&client=mv-google&gl=JP&hl=ja&guid=ON&warned=True
         if (preg_match('{^http://(www|jp|m)\\.youtube\\.com/watch\\?(?:.+&amp;)?v=([0-9a-zA-Z_\\-]+)}', $url, $m)) {
@@ -1330,8 +1288,6 @@ EOJS;
             } else {
                 $link_url = $url;
             }
-
-			$link_url = $link_url . "&fmt=18"; // 高画質用
 
             // HTMLポップアップ
             if ($_conf['iframe_popup']) {
@@ -1349,13 +1305,7 @@ EOJS;
 EOP;
             } else {
                 return <<<EOP
-{$link}<div class="preview-video preview-video-youtuve">
-<object {$youtube_winsize}>
-<param name="movie" value="http://www.youtube.com/v/{$id}" valuetype="ref" type="application/x-shockwave-flash">
-<param name="wmode" value="transparent">
-<embed src="http://www.youtube.com/v/{$id}" type="application/x-shockwave-flash" wmode="transparent" {$youtube_winsize}>
-</object>
-</div>
+{$link}<div class="preview-video preview-video-youtuve"><object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/{$id}" valuetype="ref" type="application/x-shockwave-flash"><param name="wmode" value="transparent"><embed src="http://www.youtube.com/v/{$id}" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></object></div>
 EOP;
             }
         }
