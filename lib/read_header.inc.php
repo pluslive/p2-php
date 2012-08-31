@@ -191,8 +191,6 @@ echo <<<EOP
     <meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
     {$_conf['extra_headers_ht']}
     <title>{$ptitle_ht}</title>
-    <link rel="stylesheet" type="text/css" href="css.php?css=style&amp;skin={$skin_en}">
-    <link rel="stylesheet" type="text/css" href="css.php?css=read&amp;skin={$skin_en}">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <script type="text/javascript" src="js/basic.js?{$_conf['p2_version_id']}"></script>
     <script type="text/javascript" src="js/respopup.js?{$_conf['p2_version_id']}"></script>
@@ -367,6 +365,11 @@ echo <<<EOHEADER
     //]]>
     </script>\n
 EOHEADER;
+
+echo <<<EOP
+    <link rel="stylesheet" type="text/css" href="css.php?css=style&amp;skin={$skin_en}">
+    <link rel="stylesheet" type="text/css" href="css.php?css=read&amp;skin={$skin_en}">\n
+EOP;
 
 if (!empty($_SESSION['use_narrow_toolbars'])) {
     echo <<<EOP

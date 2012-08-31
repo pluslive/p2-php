@@ -16,7 +16,17 @@
  */
 function _toolbar_i_button($icon, $label, $uri, $attrs = '')
 {
+    static $hd = null;
     global $_conf;
+
+    if ($hd === null) {
+        $hd = false;
+        if (isset($_SESSION['device_pixel_ratio'])) {
+            if ($_SESSION['device_pixel_ratio'] > 1.0) {
+                $hd = $_conf['have_glyphish_2x'];
+            }
+        }
+    }
 
     if (strlen($attrs) && strncmp($attrs, ' ', 1) !== 0) {
         $attrs = ' ' . $attrs;
@@ -32,6 +42,10 @@ function _toolbar_i_button($icon, $label, $uri, $attrs = '')
         $label = '<br>' . $label;
     } else {
         $label = '';
+    }
+
+    if ($hd && preg_match('@img/glyphish/icons2/\\d+-[\\-\\w]+\\.png$@', $icon)) {
+        $icon = substr($icon, 0, -4) . '@2x.png';
     }
 
     return <<<EOS

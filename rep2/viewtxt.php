@@ -68,7 +68,7 @@ function viewTxtFile($file, $encode)
 
     // プリント
     echo <<<EOHEADER
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">

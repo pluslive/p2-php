@@ -1,17 +1,17 @@
 <?php
 /**
- * Thumbnailer_Common
+ * Thumbnailer
  * PHP Version 5
  */
 
 require_once 'PEAR.php';
 
-// {{{ Thumbnailer_Common
+// {{{ Thumbnailer
 
 /**
  * Image manipulation abstraction.
  */
-abstract class Thumbnailer_Common
+abstract class Thumbnailer
 {
     // {{{ properties
 
@@ -211,12 +211,12 @@ abstract class Thumbnailer_Common
     /**
      * Sets rotation.
      *
-     * @param int $angle
+     * @param int $degrees
      * @return void
      */
     public function setRotation($degrees)
     {
-        $this->_rotation = $degrees;
+        $this->_rotation = (int)$degrees % 360;
     }
 
     // }}}
@@ -415,7 +415,7 @@ abstract class Thumbnailer_Common
     protected function _tempnam()
     {
         $tmp = tempnam($this->_tempDir, 'thumb_temp_');
-        register_shutdown_function('Thumbnailer_Common::removeTemporaryFile', $tmp);
+        register_shutdown_function('Thumbnailer::removeTemporaryFile', $tmp);
         return $tmp;
     }
 

@@ -18,6 +18,7 @@ $_conf['p2ua'] = "{$_conf['p2name']}/{$_conf['p2version']}+{$_conf['p2expack']}"
 define('P2_VERSION_ID', sprintf('%u', crc32($_conf['p2ua'])));
 
 $_conf['jquery_version'] = '1.7.1';
+$_conf['have_glyphish_2x'] = false;
 
 /*
  * 通常はセッションファイルのロック待ちを極力短くするため

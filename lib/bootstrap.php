@@ -640,18 +640,8 @@ if ($_conf['expack.misc.multi_favs']) {
 
 // DOCTYPE HTML êÈåæ
 $_conf['doctype'] = '';
-$ie_strict = false;
 if (!$_conf['ktai'] || $_conf['client_type'] != 'k') {
-    if ($ie_strict || strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') === false) {
-        $_conf['doctype'] = <<<EODOC
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">\n
-EODOC;
-    } else {
-        $_conf['doctype'] = <<<EODOC
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">\n
-EODOC;
-    }
+    $_conf['doctype'] = "<!DOCTYPE html>\n";
 }
 
 // XHTMLÉwÉbÉ_óvëf

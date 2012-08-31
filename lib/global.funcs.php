@@ -181,7 +181,7 @@ function p2die($err = null, $msg = null, $raw = false)
         header('Cache-Control: post-check=0, pre-check=0', false);
         header('Pragma: no-cache'); // HTTP/1.0
         echo <<<EOH
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">

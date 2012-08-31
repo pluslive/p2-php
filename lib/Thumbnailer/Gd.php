@@ -9,7 +9,7 @@
 /**
  * Image manipulation class which uses gd php extension.
  */
-class Thumbnailer_Gd extends Thumbnailer_Common
+class Thumbnailer_Gd extends Thumbnailer
 {
     // {{{ save()
 

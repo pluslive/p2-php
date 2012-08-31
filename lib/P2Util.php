@@ -396,6 +396,7 @@ class P2Util
                 self::$_itaNames[$id] = $p2_setting['itaj'] = $itaj;
 
                 $p2_setting_cont = serialize($p2_setting);
+                FileCtl::mkdirFor($p2_setting_txt);
                 if (FileCtl::file_write_contents($p2_setting_txt, $p2_setting_cont) === false) {
                     p2die("{$p2_setting_txt} ‚ğXV‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
                 }

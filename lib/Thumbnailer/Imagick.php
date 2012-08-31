@@ -9,7 +9,7 @@
 /**
  * Image manipulation class which uses imagick php extension version 2.0 or later.
  */
-class Thumbnailer_Imagick extends Thumbnailer_Common
+class Thumbnailer_Imagick extends Thumbnailer
 {
     // {{{ save()
 
@@ -94,18 +94,27 @@ class Thumbnailer_Imagick extends Thumbnailer_Common
         extract($size);
 
         $im = new Imagick();
+        $js = 0;
+        $hint = max($tw, $th) * $js;
+        if ($hint > 0 && $hint < $sw && $hint < $sh) {
+            if (pathinfo($source, PATHINFO_EXTENSION) === 'jpg') {
+                $im->setOption('jpeg:size', sprintf('%dx%d', $hint, $hint));
+            }
+        }
         $im->readImage($source);
 
-        if (method_exists($im, 'rewind')) {
-            $im->rewind();
-        }
-        if (method_exists($im, 'flattenImages')) {
+        if ($im->getNumberImages() > 1) {
             $im->flattenImages();
         }
-        if (method_exists($im, 'getImageMatte') && method_exists($im, 'setImageMatte')) {
-            if ($im->getImageMatte()) {
-                $im->setImageMatte(false);
-            }
+
+        $colorspace = $im->getImageColorSpace();
+        if ($colorspace !== Imagick::COLORSPACE_RGB &&
+            $colorspace !== Imagick::COLORSPACE_SRGB) {
+            $im->setImageColorSpace(Imagick::COLORSPACE_SRGB);
+        }
+
+        if ($im->getImageMatte()) {
+            $im->setImageMatte(false);
         }
 
         if ($this->doesTrimming()) {
@@ -113,12 +122,13 @@ class Thumbnailer_Imagick extends Thumbnailer_Common
         }
 
         if ($this->doesResampling()) {
-            $im->thumbnailImage($tw, $th);
-        } else {
-            $im->stripImage();
+            $im->resizeImage($tw, $th, Imagick::FILTER_LANCZOS, 0.9, true);
         }
 
-        if ($degrees = $this->getRotation()) {
+        $im->stripImage();
+
+        $degrees = $this->getRotation();
+        if ($degrees) {
             $bgcolor = $this->getBgColor();
             $bg = sprintf('rgb(%d,%d,%d)', $bgcolor[0], $bgcolor[1], $bgcolor[2]);
             $im->rotateImage(new ImagickPixel($bg), $degrees);
@@ -132,8 +142,6 @@ class Thumbnailer_Imagick extends Thumbnailer_Common
                 $im->setCompressionQuality($this->getQuality());
             }
         }
-
-        $im->setImageColorSpace(Imagick::COLORSPACE_RGB);
 
         return $im;
     }

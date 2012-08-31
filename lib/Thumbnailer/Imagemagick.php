@@ -9,7 +9,7 @@
 /**
  * Image manipulation class which uses ImageMagick.
  */
-class Thumbnailer_Imagemagick extends Thumbnailer_Common
+class Thumbnailer_Imagemagick extends Thumbnailer
 {
     // {{{ properties
 
