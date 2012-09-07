@@ -10,7 +10,7 @@ var ic2info = {};
 // {{{ DOMContentLoaded
 
 document.addEventListener('DOMContentLoaded', function(event) {
-	// {{{ initiaize
+	// {{{ initialize
 
 	ic2info._targetId = null;
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 		return '&_=' + (new Date()).getTime().toString();
 	};
 
-	// }}
+	// }}}
 	// {{{ show()
 
 	/*
@@ -71,6 +71,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
 				thumb = document.createElement('img');
 				thumb.setAttribute('src', info.thumb || 'ic2.php?r=2&t=1&id=' + info.id + _uniquery());
+				thumb.setAttribute('width', info.thumbWidth);
+				thumb.setAttribute('height', info.thumbWeight);
 
 				_previewContainer.appendChild(edit).appendChild(thumb);
 			}

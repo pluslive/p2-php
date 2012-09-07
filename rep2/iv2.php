@@ -1001,6 +1001,7 @@ if ($list_template == 'iv2ip.tpl.html') {
     $ll_autoactivate = empty($_GET['ll_autoactivate']) ? 'false' : 'true';
     $limelight_header = <<<EOP
 <link rel="stylesheet" type="text/css" href="css/limelight.css?{$_conf['p2_version_id']}">
+<script type="text/javascript" src="js/jquery-{$_conf['jquery_version']}.min.js"></script>
 <script type="text/javascript" src="js/limelight.js?{$_conf['p2_version_id']}"></script>
 <script type="text/javascript">
 // <![CDATA[

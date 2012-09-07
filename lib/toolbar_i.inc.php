@@ -6,6 +6,32 @@
 // {{{ _toolbar_i_button()
 
 /**
+ * ツールバーアイコン
+ *
+ * @param string $icon
+ * @return string
+ */
+function _toolbar_i_icon($icon)
+{
+    static $hd = null;
+
+    if ($hd === null) {
+        $hd = false;
+        if (isset($_SESSION['device_pixel_ratio'])) {
+            if ($_SESSION['device_pixel_ratio'] > 1.0) {
+                $hd = $GLOBALS['_conf']['have_glyphish_2x'];
+            }
+        }
+    }
+
+    if ($hd && preg_match('@img/glyphish/icons2/\\d+-[\\-\\w]+\\.png$@', $icon)) {
+        $icon = substr($icon, 0, -4) . '@2x.png';
+    }
+
+    return $icon;
+}
+
+/**
  * ツールバーボタン (リンク)
  *
  * @param string $icon
@@ -16,17 +42,7 @@
  */
 function _toolbar_i_button($icon, $label, $uri, $attrs = '')
 {
-    static $hd = null;
     global $_conf;
-
-    if ($hd === null) {
-        $hd = false;
-        if (isset($_SESSION['device_pixel_ratio'])) {
-            if ($_SESSION['device_pixel_ratio'] > 1.0) {
-                $hd = $_conf['have_glyphish_2x'];
-            }
-        }
-    }
 
     if (strlen($attrs) && strncmp($attrs, ' ', 1) !== 0) {
         $attrs = ' ' . $attrs;
@@ -44,9 +60,7 @@ function _toolbar_i_button($icon, $label, $uri, $attrs = '')
         $label = '';
     }
 
-    if ($hd && preg_match('@img/glyphish/icons2/\\d+-[\\-\\w]+\\.png$@', $icon)) {
-        $icon = substr($icon, 0, -4) . '@2x.png';
-    }
+    $icon = _toolbar_i_icon($icon);
 
     return <<<EOS
 <a href="{$uri}"{$attrs}><img src="{$icon}" width="48" height="32" alt="">{$label}</a>
@@ -128,6 +142,8 @@ function toolbar_i_disabled_button($icon, $label)
     } else {
         $label = '';
     }
+
+    $icon = _toolbar_i_icon($icon);
 
     return <<<EOS
 <span class="unavailable"><img src="{$icon}" width="48" height="32" alt="">{$label}</span>

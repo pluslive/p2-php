@@ -2052,55 +2052,21 @@ Limelight.prototype.setLastClicked = function(button) {
  * @return void
  */
 Limelight.prototype.onOrientationChange = function() {
-	var x, y, width, height, isPortrait, viewportSize, margins;
+	var x, y, width, height;
 
 	x = 0;
 	y = window.scrollY;
+	width = $(window).width();
+	height = $(window).height();
 
 	if (navigator.userAgent.search(/\bi(Phone|Pod)\b/) !== -1) {
-		isPortrait = Limelight.ui.isPortrait();
-		viewportSize = Limelight.ui.getViewportSize(isPortrait);
-		margins = Limelight.ui.getMargins(isPortrait);
-		width = viewportSize[0] - margins[0];
-		height = viewportSize[1] - margins[1];
+		height += 60; // add statusbar height
 		if (this.box.className.indexOf('limelight-box-iphone') === -1) {
 			this.box.className += ' limelight-box-iphone';
 		}
 	} else if (navigator.userAgent.search(/\biPad\b/) !== -1) {
-		if (Limelight.ui.isPortrait()) {
-			width = 768;
-			height = 1024;
-		} else {
-			width = 1024;
-			height = 768;
-		}
-		height -= (18 + 58);
 		if (this.box.className.indexOf('limelight-box-ipad') === -1) {
 			this.box.className += ' limelight-box-ipad';
-		}
-	} else {
-		if (document.all && !window.opera) {
-			if (document.compatMode === 'BackCompat') {
-				y = document.body.scrollTop;
-			} else {
-				y = document.documentElement.scrollTop;
-			}
-		} else {
-			if (typeof window.scrollX === 'number') {
-				y = window.scrollY;
-			} else {
-				y = window.pageYOffset;
-			}
-		}
-		if (typeof document.compatMode === 'undefined') {
-			width = document.innerWidth;
-			height = document.innerHeight;
-		} else if (document.compatMode === 'BackCompat') {
-			width = document.body.clientWidth;
-			height = document.body.clientHeight;
-		} else {
-			width = document.documentElement.clientWidth;
-			height = document.documentElement.clientHeight;
 		}
 	}
 

@@ -49,14 +49,26 @@ if (!$icdb->find(1)) {
 }
 
 $thumb_type = isset($_GET['t']) ? $_GET['t'] : ImageCache2_Thumbnailer::SIZE_DEFAULT;
+if (!empty($_SESSION['device_pixel_ratio'])) {
+    $dpr = $_SESSION['device_pixel_ratio'];
+} else {
+    $dpr = 1.0;
+}
 switch ($thumb_type) {
     case ImageCache2_Thumbnailer::SIZE_PC:
     case ImageCache2_Thumbnailer::SIZE_MOBILE:
     case ImageCache2_Thumbnailer::SIZE_INTERMD:
+        $calculator = new ImageCache2_Thumbnailer($thumb_type);
+        if ($dpr === 1.5) {
+            $thumb_type |= ImageCache2_Thumbnailer::DPR_1_5;
+        } elseif ($dpr === 2.0) {
+            $thumb_type |= ImageCache2_Thumbnailer::DPR_2_0;
+        }
         $thumbnailer = new ImageCache2_Thumbnailer($thumb_type);
         break;
     default:
         $thumbnailer = new ImageCache2_Thumbnailer();
+        $calculator = $thumbnailer;
 }
 
 $size = (int)$icdb->size;
@@ -67,6 +79,10 @@ $srcPath   = $thumbnailer->srcPath($size, $md5, $mime);
 $thumbPath = $thumbnailer->thumbPath($size, $md5, $mime);
 $srcUrl    = $thumbnailer->srcUrl($size, $md5, $mime);
 $thumbUrl  = $thumbnailer->thumbUrl($size, $md5, $mime);
+
+$width  = (int)$icdb->width;
+$height = (int)$icdb->height;
+list($thumbWidth, $thumbHeight) = $calculator->calc($width, $height, true);
 
 echo json_encode(array(
     'id'     => (int)$icdb->id,
@@ -84,6 +100,8 @@ echo json_encode(array(
     'url'    => $icdb->uri,
     'src'    => ($srcPath && file_exists($srcPath)) ? $srcUrl : null,
     'thumb'  => ($thumbPath && file_exists($thumbPath)) ? $thumbUrl : null,
+    'thumbWidth'  => $thumbWidth,
+    'thumbHeight' => $thumbHeight,
 ));
 exit;
 
