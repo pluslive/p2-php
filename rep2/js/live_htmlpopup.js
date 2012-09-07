@@ -71,7 +71,12 @@ function showHtmlPopUpDo(marker)
 	hideHtmlPopUp();
 
 	gUrl = tUrl;
-	var x_adjust = 300;	// x軸位置調整
+	// 画像のみ位置調整
+	if (gUrl.match(/\.(jpe?g|gif|png)/)) {
+		var x_adjust = 300;
+	} else {
+	var x_adjust = 7;	// x軸位置調整
+	}
 	var y_adjust = -46;	// y軸位置調整
 	var closebox_width = 18;
 

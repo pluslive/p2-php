@@ -78,7 +78,12 @@ function showHtmlPopUpDo(marker)
 	hideHtmlPopUp(null, true);
 
 	gUrl = tUrl;
-	var popup_x_adjust = 300;			// popup(iframe)のx軸位置調整
+	// 画像のみ位置調整
+	if (gUrl.match(/\.(jpe?g|gif|png)/)) {
+		var popup_x_adjust = 300;
+	} else {
+	var popup_x_adjust = 7;			// popup(iframe)のx軸位置調整
+	}
 	var closebox_width = 18;		// ×の横幅
 	var adjust_for_scrollbar = 22;	// 22 スクロールバーを考慮して少し小さ目に微調整
 	
