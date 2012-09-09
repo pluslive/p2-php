@@ -58,32 +58,14 @@ class P2UtilWiki
      */
     public static function cacheDownload($url, $path, $time = 0)
     {
-        global $_conf;
-
         $filetime = @filemtime($path);
 
-        // キャッシュ有効期間ならチェックしない
-        if ($filetime > 0 && $filetime > time() - $time) {
+        // キャッシュ有効期間ならダウンロードしない
+        if ($filetime !== false && $filetime > time() - $time) {
             return;
         }
-        if (!class_exists('HTTP_Request', false)) {
-            require 'HTTP/Request.php';
-        }
-        $req = new HTTP_Request($url, array('timeout' => $_conf['fsockopen_time_limit']));
-        $req->setMethod('HEAD');
-        $now = time();
-        $req->sendRequest();
-        $unixtime = strtotime($req->getResponseHeader('Last-Modified'));
 
         // 新しければ取得
-        if($unixtime > $filetime){ 
-            P2Util::fileDownload($url, $path);
-            // 最終更新日時を設定
-            // touch($path, $unixtime);
-        } else {
-            // touch($path, $now);
-        }
-        touch($path, $now);
+        P2Util::fileDownload($url, $path);
     }
-
 }

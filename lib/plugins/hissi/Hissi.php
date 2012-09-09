@@ -24,6 +24,37 @@ class Hissi
     public $date;   // 日付をyyyymmddで指定
     protected $enabled;
 
+    protected $hissiOrg = 'http://hissi.org';
+    protected $menuPath = '/menu.php';
+    protected $readPath = '/read.php';
+    protected $menuUrl;
+    protected $readUrl;
+    protected $readPattern;
+
+    /**
+     * コンストラクタ
+     */
+    public function __construct(array $options = null)
+    {
+        if ($options) {
+            $validOptions = array(
+                'host', 'bbs', 'id', 'date',
+                'hissiOrg', 'menuPath', 'readPath',
+            );
+            foreach ($validOptions as $option) {
+                if (isset($options[$option])) {
+                    $this->$option = $options[$option];
+                }
+            }
+        }
+
+        $this->menuUrl = $this->hissiOrg . $this->menuPath;
+        $this->readUrl = $this->hissiOrg . $this->readPath;
+        $this->readPattern = '@<a href='
+            . preg_quote($this->readUrl, '@')
+            . '/(\\w+)/>.+?</a><br>@';
+    }
+
     /**
      * 必死チェッカー対応板を読み込む
      * 自動で読み込まれるので通常は実行する必要はない
@@ -32,15 +63,14 @@ class Hissi
     {
         global $_conf;
 
-        $url  = 'http://hissi.org/menu.html';
-        $path = P2Util::cacheFileForDL($url);
+        $path = P2Util::cacheFileForDL($this->menuUrl);
         // メニューのキャッシュ時間の10倍キャッシュ
-        P2UtilWiki::cacheDownload($url, $path, $_conf['menu_dl_interval'] * 36000);
+        P2UtilWiki::cacheDownload($this->menuUrl, $path, $_conf['menu_dl_interval'] * 36000);
 
         $this->boards = array();
         $file = @file_get_contents($path);
         if ($file) {
-            if (preg_match_all('{<a href=http://hissi\.org/read\.php/(\w+?)/>.+?</a><br>}', $file, $boards)) {
+            if (preg_match_all($this->readPattern, $file, $boards)) {
                 $this->boards = $boards[1];
             }
         }
@@ -73,12 +103,13 @@ class Hissi
      */
     public function getIDURL($all = false, $page = 0)
     {
+        $boardDateUrl = $this->getBoardDateURL();
         $id_en = rtrim(base64_encode($this->id), '=');
         $query = $all ? '?thread=all' : '';
         if ($page) {
             $query = $query ? "{$query}&p={$page}" : "?p={page}";
         }
-        return "http://hissi.org/read.php/{$this->bbs}/{$this->date}/{$id_en}.html{$query}";
+        return "{$boardDateUrl}{$id_en}.html{$query}";
     }
 
     /**
@@ -87,7 +118,7 @@ class Hissi
      */
     public function getBoardURL()
     {
-        return "http://hissi.org/read.php/{$this->bbs}/";
+        return "{$this->readUrl}/{$this->bbs}/";
     }
 
     /**
@@ -96,6 +127,7 @@ class Hissi
      */
     public function getBoardDateURL()
     {
-        return "http://hissi.org/read.php/{$this->bbs}/{$this->date}/";
+        $boardUrl = $this->getBoardURL();
+        return "{$boardUrl}{$this->date}/";
     }
 }

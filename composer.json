@@ -1,4 +1,7 @@
 {
+    "name": "rsky/p2-php",
+    "description": "The server side 2ch viewer written in PHP",
+    "license": "MIT",
     "require": {
         "php": ">=5.3.2",
         "symfony/console": "2.0.*",
