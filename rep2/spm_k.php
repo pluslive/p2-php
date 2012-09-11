@@ -13,11 +13,11 @@ $_login->authorize(); // ユーザ認証
 //=================================================
 if (isset($_GET['ktool_name']) && isset($_GET['ktool_value'])) {
     $ktv = (int)$_GET['ktool_value'];
-    $base_dir_s = P2_BASE_DIR . DIRECTORY_SEPARATOR;
+    $www_dir_s = P2_WWW_DIR . DIRECTORY_SEPARATOR;
     switch ($_GET['ktool_name']) {
         case 'goto':
             $_REQUEST['ls'] = $_GET['ls'] = sprintf('%d-%d', $ktv, $ktv + $_conf['mobile.rnum_range']);
-            include $base_dir_s . 'read.php';
+            include $www_dir_s . 'read.php';
             exit;
         case 'rref':
             $_REQUEST['rf'] = array(
@@ -27,25 +27,25 @@ if (isset($_GET['ktool_name']) && isset($_GET['ktool_value'])) {
                 'include' => ResFilter::INCLUDE_REFERENCED,
                 'word' => (string)$ktv, // intではだめ
             );
-            include $base_dir_s . 'read.php';
+            include $www_dir_s . 'read.php';
             exit;
         case 'res':
         case 'res_quote':
             $_GET['resnum'] = $ktv;
             $_GET['inyou'] = ($_GET['ktool_name'] == 'res') ? -1 : 1;
-            include $base_dir_s . 'post_form.php';
+            include $www_dir_s . 'post_form.php';
             exit;
         case 'copy_quote':
             $_GET['inyou'] = 1;
         case 'copy':
             $_GET['copy'] = $ktv;
-            include $base_dir_s . 'read_copy_k.php';
+            include $www_dir_s . 'read_copy_k.php';
             exit;
         case 'aas_rotate':
             $_GET['rotate'] = 1;
         case 'aas':
             $_GET['resnum'] = $ktv;
-            include $base_dir_s . 'aas.php';
+            include $www_dir_s . 'aas.php';
             exit;
         case 'aborn_res':
         case 'aborn_name':
@@ -61,7 +61,7 @@ if (isset($_GET['ktool_name']) && isset($_GET['ktool_value'])) {
             $_GET['resnum'] = $ktv;
             $_GET['popup'] = 1;
             $_GET['mode'] = $_GET['ktool_name'];
-            include $base_dir_s . 'info_sp.php';
+            include $www_dir_s . 'info_sp.php';
             exit;
         default:
             p2die('不正なコマンド');
