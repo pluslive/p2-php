@@ -168,8 +168,7 @@ echo <<<EOP
 <br>
 <div class="container">
     {$newversion_found}
-    <p>+live {$_conf['p2live']}<br>
-    {$_conf['p2name']} ver.{$_conf['p2version']}<br>
+    <p>{$_conf['p2name']} ver.{$_conf['p2version']} +live<br>
     <a href="{$expack_url_r}"{$_conf['ext_win_target_at']}>{$_conf['expack.web_url']}</a><br>
     <a href="{$p2web_url_r}"{$_conf['ext_win_target_at']}>{$_conf['p2web_url']}</a></p>
     <ul>
