@@ -6,6 +6,7 @@ use Symfony\Component\Console\Application as sfConsoleApplication;
 use expack\Console\Command;
 
 require_once __DIR__ . '/Command/Archive.php';
+require_once __DIR__ . '/Command/Check.php';
 require_once __DIR__ . '/Command/Update.php';
 
 class Application extends sfConsoleApplication
@@ -19,6 +20,7 @@ class Application extends sfConsoleApplication
         parent::__construct('rep2-expack console script', '1.0');
         $this->addCommands(array(
             new Command\Archive(),
+            new Command\Check(),
             new Command\Update(),
         ));
     }

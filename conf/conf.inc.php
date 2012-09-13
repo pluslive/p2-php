@@ -6,14 +6,13 @@
 
 // バージョン情報
 $_conf = array(
-    'p2version' => '1.7.99',        // rep2のバージョン
-    'p2expack'  => '120300.9999',   // 拡張パックのバージョン
-    'p2name'    => 'expack',        // rep2の名前
-    'p2custom'  => '0',             // カスタムバージョン
-	'p2live'    => '120824.0000',   // +liveのバージョン
+    'p2name'    => 'rep2-expack',   // rep2の名前
+    'p2version' => '120912.2345',   // rep2のバージョン
+
+    'p2live'    => '120824.0000',   // +liveのバージョン
 );
 
-$_conf['p2ua'] = "{$_conf['p2name']}/{$_conf['p2version']}+{$_conf['p2expack']}";
+$_conf['p2ua'] = "{$_conf['p2name']}/{$_conf['p2version']}";
 
 define('P2_VERSION_ID', sprintf('%u', crc32($_conf['p2ua'])));
 
@@ -179,14 +178,11 @@ function p2_init()
     include P2_LIB_DIR . '/startup.funcs.php';
     spl_autoload_register('p2_load_class');
 
-    require_once P2_LIB_DIR . '/wiki/P2UtilWiki.php';
-
-    // 動作環境を確認 (要件を満たしているならコメントアウト可)
-    p2_check_environment();
+    include P2_LIB_DIR . '/wiki/P2UtilWiki.php';
 
     if ($debug) {
         if (!class_exists('Benchmark_Profiler', false)) {
-            require 'Benchmark/Profiler.php';
+            include 'Benchmark/Profiler.php';
         }
         $profiler = new Benchmark_Profiler(true);
         // p2_print_memory_usage();

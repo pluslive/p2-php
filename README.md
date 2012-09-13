@@ -30,11 +30,19 @@
 つ[Tags](https://github.com/rsky/p2-php/tags)
 
 
+## 動作環境
+以下のコマンドを実行して、全ての項目で `OK` が出たなら大丈夫です。
+
+何かエラーが出たらがんばって環境を整えてください。
+
+    php scripts/p2cmd.php check
+
+
 ## Built-in web serverで使ってみる (PHP 5.4+)
 
 PHP 5.4の新機能、[ビルトインウェブサーバー](http://docs.php.net/manual/ja/features.commandline.webserver.php)で簡単に試せます。
 
-ルートディレクトリで以下のようにすると、Webサーバーの設定をしなくても `http://localhost:8080/` でrep2を使えます。(Windowsでも!)
+ルートディレクトリで以下のようにすると、Webサーバーの設定をしなくても `http://localhost:8080/` でrep2を使えます。**(Windowsでも!)**
 
     php -S localhost:8080 -t rep2 router.php
 

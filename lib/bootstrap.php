@@ -40,12 +40,7 @@ if (file_exists($_conf['conf_user_file'])) {
         $config_version = '000000.0000';
     }
 
-    if ($config_version !== $_conf['p2expack'] && !defined('P2_CLI_RUN')) {
-        // 設定の更新
-        if ($migrators = p2_check_migration($config_version)) {
-            $conf_user = p2_invoke_migrators($migrators, $conf_user);
-        }
-
+    if ($config_version !== $_conf['p2version'] && !defined('P2_CLI_RUN')) {
         // デフォルト設定を読み込み、ユーザー設定とともにマージ
         include P2_CONFIG_DIR . '/conf_user_def.inc.php';
         $_conf = array_merge($_conf, $conf_user_def, $conf_user);
@@ -69,7 +64,7 @@ if (defined('P2_CLI_RUN')) {
 
 // 新しいユーザー設定をシリアライズして保存
 if ($save_conf_user) {
-    $conf_save = array('.' => $_conf['p2expack']);
+    $conf_save = array('.' => $_conf['p2version']);
     foreach ($conf_user_def as $k => $v) {
         $conf_save[$k] = $_conf[$k];
     }
