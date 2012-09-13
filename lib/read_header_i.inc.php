@@ -88,6 +88,7 @@ EOS;
 if ($_conf['expack.aas.enabled'] || $_conf['expack.ic2.enabled']) {
     $_conf['extra_headers_ht'] .= <<<EOS
 <link rel="stylesheet" type="text/css" href="css/limelight.css?{$_conf['p2_version_id']}">
+<script type="text/javascript" src="js/jquery-{$_conf['jquery_version']}.min.js"></script>
 <script type="text/javascript" src="js/limelight.js?{$_conf['p2_version_id']}"></script>
 <script type="text/javascript">
 // <![CDATA[
