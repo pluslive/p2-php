@@ -892,6 +892,8 @@ abstract class ShowThread
 
 			$str = (string)$num;
 			$this->_highlight_nums[$num] = $str;
+
+			$this->_has_ngaborns = true;
 		}
 
 		return $type;
