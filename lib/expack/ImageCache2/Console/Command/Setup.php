@@ -14,6 +14,9 @@ require_once P2EX_LIB_DIR . '/ImageCache2/bootstrap.php';
 
 class Setup extends sfConsoleCommand
 {
+    const PG_TRGM_GIST  = 'gist';
+    const PG_TRGM_GIN   = 'gin';
+
     // {{{ properties
 
     /**
@@ -25,6 +28,11 @@ class Setup extends sfConsoleCommand
      * @var bool
      */
     private $dryRun;
+
+    /**
+     * @var string
+     */
+    private $pgTrgm;
 
     /**
      * @var DB_common
@@ -68,7 +76,8 @@ class Setup extends sfConsoleCommand
         ->setName('setup')
         ->setDescription('Setups ImageCache2 environment')
         ->setDefinition(array(
-            new InputOption('check-only', null, null, 'Don\'t execute anything')
+            new InputOption('check-only', null, InputOption::VALUE_NONE, 'Don\'t execute anything'),
+            new InputOption('pg-trgm', null, InputOption::VALUE_REQUIRED, 'Enable gist or gin 3-gram index'),
         ));
     }
 
@@ -80,6 +89,7 @@ class Setup extends sfConsoleCommand
     {
         $this->config = ic2_loadconfig();
         $this->dryRun = (bool)$input->getOption('check-only');
+        $this->pgTrgm = $input->getOption('pg-trgm');
         $this->output = $output;
 
         if ($this->checkConfiguration()) {
@@ -425,6 +435,20 @@ SQL;
                 }
             }
         }
+
+        if (strcasecmp(get_class($this->db), 'db_pgsql') === 0) {
+            $pgTrgm = $this->pgTrgm;
+            if ($pgTrgm === self::PG_TRGM_GIST ||
+                $pgTrgm === self::PG_TRGM_GIN) {
+                $indexName = 'idx_memo_tgrm';
+                if ($this->findIndex($indexName, $imagesTable)) {
+                    $this->info("Index '{$indexName}' already exists");
+                } else {
+                    $this->doCreatePgTrgmIndex($pgTrgm, $indexName,
+                                               $imagesTable, 'memo');
+                }
+            }
+        }
     }
 
     private function doCreateIndex($indexName, $tableName, array $fieldNames)
@@ -448,6 +472,31 @@ SQL;
         }
 
         $this->info("Index '{$indexName}' created");
+
+        return true;
+    }
+
+    private function doCreatePgTrgmIndex($indexType, $indexName, $tableName, $fieldName)
+    {
+        $db = $this->db;
+        $sql = sprintf('CREATE INDEX %2$s ON %3$s USING %1$s (%4$s %1$s_trgm_ops);',
+                       $indexType,
+                       $db->quoteIdentifier($indexName),
+                       $db->quoteIdentifier($tableName),
+                       $db->quoteIdentifier($fieldName));
+
+        if ($this->dryRun) {
+            $this->comment($sql);
+            return true;
+        }
+
+        $result = $db->query($sql);
+        if (PEAR::isError($result)) {
+            $this->error($result->getMessage());
+            return false;
+        }
+
+        $this->info("{$indexType} Index '{$indexName}' created");
 
         return true;
     }

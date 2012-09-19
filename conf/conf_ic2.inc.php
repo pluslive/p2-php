@@ -86,7 +86,8 @@ $_conf['expack.ic2.viewer.cache'] = 0;
 // 手動でクリアするまでずっと=-1
 $_conf['expack.ic2.viewer.cache_lifetime'] = 3600;
 
-// 重複画像を最初にヒットする1枚だけ表示 (off:0;on:1)
+// 重複画像を最初にヒットする1枚だけ表示
+// (off:0;on:1;サイズで並び替えるときだけ:2;)
 // サブクエリに対応していないMySQL 4.1未満で有効にするとエラーが出る
 $_conf['expack.ic2.viewer.unique'] = 0;
 
