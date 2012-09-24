@@ -5,6 +5,7 @@ namespace expack\Console;
 use Symfony\Component\Console\Application as sfConsoleApplication;
 use expack\Console\Command;
 
+require_once __DIR__ . '/Command/Command.php';
 require_once __DIR__ . '/Command/Archive.php';
 require_once __DIR__ . '/Command/Check.php';
 require_once __DIR__ . '/Command/Update.php';

@@ -2,11 +2,10 @@
 
 namespace expack\Console\Command;
 
-use Symfony\Component\Console\Command\Command as sfConsoleCommand;
 use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface;
 
-class Check extends sfConsoleCommand
+class Check extends Command
 {
     /**
      * (non-PHPdoc)
