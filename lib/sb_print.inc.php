@@ -115,6 +115,8 @@ function sb_print($aThreadList)
         $word_q = '';
     }
 
+    $fav_index = $_conf['expack.misc.multi_favs'] ? intval($_SESSION['m_favlist_set']) : 0;
+
     //=====================================================
     // テーブルヘッダ
     //=====================================================
@@ -280,8 +282,7 @@ EOP;
         // お気に入り ========================================
         if ($_conf['sb_show_fav']) {
             if ($aThreadList->spmode != 'taborn') {
-
-                if (empty($aThread->favs[$_SESSION['m_favlist_set']])) {
+                if (empty($aThread->favs[$fav_index])) {
                     $favmark = '+';
                     $favdo = '1';
                 } else {

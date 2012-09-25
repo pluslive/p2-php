@@ -15,16 +15,16 @@
 $_conf['data_dir'] = P2_BASE_DIR . '/data';
 
 // 取得スレッドの dat データ保存ディレクトリ
-$_conf['dat_dir'] = P2_BASE_DIR . '/data/dat';
+$_conf['dat_dir'] = $_conf['data_dir'] . '/dat';
 
 // 取得スレッドの idx データ保存ディレクトリ
-$_conf['idx_dir'] = P2_BASE_DIR . '/data/idx';
+$_conf['idx_dir'] = $_conf['data_dir'] . '/idx';
 
 // 初期設定データ保存ディレクトリ
-$_conf['pref_dir'] = P2_BASE_DIR . '/data/pref';
+$_conf['pref_dir'] = $_conf['data_dir'] . '/pref';
 
 // SQLite3データベース保存ディレクトリ
-$_conf['db_dir'] = P2_BASE_DIR . '/data/db';
+$_conf['db_dir'] = $_conf['data_dir'] . '/db';
 
 // }}}
 // ----------------------------------------------------------------------
