@@ -398,7 +398,7 @@ function rss_desc_tag_cleaner($tag)
                         }
                     }
                     // イメージキャッシュが無効のとき画像は表示しない
-                    break '';
+                    return '';
                 case 'alt':
                     if ($element == 'img' && !P2_RSS_IMAGECACHE_AVAILABLE) {
                         return ' [img:'.$value.']'; // 画像はalt属性を代わりに表示
