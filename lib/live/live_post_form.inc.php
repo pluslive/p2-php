@@ -143,6 +143,7 @@ $htm['post_form'] = <<<EOP
 <!--//{$htm['table_end']}-->
 {$htm['samba']}
 {$htm['k_br']}{$savedraft}
+{$upload_form}
 <br>
 <textarea id="MESSAGE" name="MESSAGE" style="width: 95%; height: 55%;" wrap="{$wrap_at}"{$htm['kaiko_on_js']}{$htm['msg_extra_at']}>{$hd['MESSAGE']}</textarea>
 
