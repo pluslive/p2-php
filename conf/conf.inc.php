@@ -7,7 +7,7 @@
 // バージョン情報
 $_conf = array(
     'p2name'    => 'rep2-expack',   // rep2の名前
-    'p2version' => '121126.0050',   // rep2のバージョン
+    'p2version' => '130305.0525',   // rep2のバージョン
 );
 
 $_conf['p2ua'] = "{$_conf['p2name']}/{$_conf['p2version']}";
@@ -286,6 +286,8 @@ function p2_init()
     }
 
     // }}}
+
+    $_conf['dropbox_auth_json'] = P2_CONFIG_DIR . '/dropbox.json';
 
     include P2_CONFIG_DIR . '/empty_style.php';
     include P2_LIB_DIR . '/bootstrap.php';
