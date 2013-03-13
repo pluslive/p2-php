@@ -4,7 +4,6 @@
  */
 
 require_once P2EX_LIB_DIR . '/rss/common.inc.php';
-require_once 'XML/RSS.php';
 
 // {{{ ImageCache2‚Æ‚Ì˜AŒg”»’è
 

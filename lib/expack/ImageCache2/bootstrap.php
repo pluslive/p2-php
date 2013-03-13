@@ -3,9 +3,6 @@
  * rep2expack - ImageCache2 初期化スクリプト
  */
 
-require_once 'DB.php';
-require_once 'DB/DataObject.php';
-
 // {{{ GLOBALS
 
 $GLOBALS['_P2_GETIMAGE_CACHE'] = array();
