@@ -746,6 +746,7 @@ function ic2_display($url, $params)
             $qf->addElement('submit', 'o');
 
             // Flexy‚ÆQurickForm_Renderer‚Ì‰Šú‰»
+            $_flexy_options = &PEAR5::getStaticProperty('HTML_Template_Flexy', 'options');
             $_flexy_options = array(
                 'locale' => 'ja',
                 'charset' => 'Shift_JIS',
@@ -753,7 +754,7 @@ function ic2_display($url, $params)
                 'templateDir' => P2EX_LIB_DIR . '/ImageCache2/templates',
                 'numberFormat' => '', // ",0,'.',','" ‚Æ“™‰¿
             );
-            $flexy = new HTML_Template_Flexy($_flexy_options);
+            $flexy = new HTML_Template_Flexy;
             $rdr = new HTML_QuickForm_Renderer_ObjectFlexy($flexy);
             $qf->accept($rdr);
 

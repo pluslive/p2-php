@@ -65,6 +65,7 @@ if (isset($_POST['clean'])) {
 // }}}
 // {{{ o—Í
 
+$_flexy_options = &PEAR5::getStaticProperty('HTML_Template_Flexy', 'options');
 $_flexy_options = array(
     'locale' => 'ja',
     'charset' => 'Shift_JIS',
@@ -73,7 +74,7 @@ $_flexy_options = array(
     'numberFormat' => '', // ",0,'.',','" ‚Æ“™‰¿
 );
 
-$flexy = new HTML_Template_Flexy($_flexy_options);
+$flexy = new HTML_Template_Flexy;
 
 $flexy->setData('php_self', $_SERVER['SCRIPT_NAME']);
 $flexy->setData('p2vid', P2_VERSION_ID);

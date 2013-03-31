@@ -280,6 +280,7 @@ $qf->addRule('mode', 'invalid mode.', 'arrayKeyExists', $_mode);
 $qf->addRule('thumbtype', 'invalid thumbtype.', 'arrayKeyExists', $_thumbtype);
 
 // Flexy
+$_flexy_options = &PEAR5::getStaticProperty('HTML_Template_Flexy', 'options');
 $_flexy_options = array(
     'locale' => 'ja',
     'charset' => 'Shift_JIS',
@@ -293,7 +294,7 @@ if (!is_dir($_conf['compile_dir'])) {
     FileCtl::mkdirRecursive($_conf['compile_dir']);
 }
 
-$flexy = new HTML_Template_Flexy($_flexy_options);
+$flexy = new HTML_Template_Flexy;
 
 $flexy->setData('php_self', $_SERVER['SCRIPT_NAME']);
 $flexy->setData('base_dir', dirname($_SERVER['SCRIPT_NAME']));

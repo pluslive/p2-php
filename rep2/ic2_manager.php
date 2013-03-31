@@ -36,6 +36,7 @@ if (DB::isError($db)) {
 }
 
 // テンプレートエンジン初期化
+$_flexy_options = &PEAR5::getStaticProperty('HTML_Template_Flexy', 'options');
 $_flexy_options = array(
     'locale' => 'ja',
     'charset' => 'Shift_JIS',
@@ -44,7 +45,7 @@ $_flexy_options = array(
     'numberFormat' => '', // ",0,'.',','" と等価
 );
 
-$flexy = new HTML_Template_Flexy($_flexy_options);
+$flexy = new HTML_Template_Flexy;
 
 // }}}
 // {{{ データベース操作・ファイル削除

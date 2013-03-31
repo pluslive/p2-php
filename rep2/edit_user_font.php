@@ -11,7 +11,8 @@ $_login->authorize();
 
 require_once P2_LIB_DIR . '/fontconfig.inc.php';
 
-$flexy_options = array(
+$_flexy_options = &PEAR5::getStaticProperty('HTML_Template_Flexy', 'options');
+$_flexy_options = array(
     'templateDir' => './skin',
     'compileDir'  => $_conf['compile_dir'] . DIRECTORY_SEPARATOR . 'fontconfig',
     'locale' => 'ja',
@@ -89,7 +90,7 @@ if (!is_dir($_conf['compile_dir'])) {
 }
 
 // テンプレートをコンパイル
-$flexy = new HTML_Template_Flexy($flexy_options);
+$flexy = new HTML_Template_Flexy;
 $flexy->compile('edit_user_font.tpl.html');
 $elements = $flexy->getElements();
 
