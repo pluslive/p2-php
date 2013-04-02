@@ -1,10 +1,15 @@
-# rep2 expack
+﻿# rep2 expack +live
 
-なんだかんだで歴史の長い、PHPでつくられたサーバーサイド2ちゃんねるビューワーです。
+rskさん作 rep2expack を元に、実況用機能を追加しています。
 
-作りがレガシーなのは作っているひとがいちばんよくわかっているので、勘弁してつかあさい。
 
-[次世代版建設予定地](https://github.com/rsky/page2)
+### 追加機能
+
+* 実況用表示
+* オートリロード/スクロール
+* ハイライトワード/連鎖ハイライト
+
+その他基本機能はベースとなっている rep2expack と同じです。
 
 
 ## セットアップ
@@ -12,7 +17,7 @@
 ### Git & Composerで
 
 1. 本体をclone
-  <pre>git clone git://github.com/rsky/p2-php.git
+  <pre>git clone git://github.com/pluslive/p2-php.git
   cd p2-php</pre>
 
 2. 依存ライブラリをダウンロード
