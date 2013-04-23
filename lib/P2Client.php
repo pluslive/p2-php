@@ -21,6 +21,7 @@ class P2Client
     const SCRIPT_NAME_POST = 'post.php';
     const SCRIPT_NAME_INFO = 'info.php';
     const SCRIPT_NAME_DAT  = 'dat.php';
+    const SCRIPT_NAME_POST_FORM = 'post_form.php';
 
     /**
      * User-Agent
@@ -277,6 +278,36 @@ class P2Client
     }
 
     // }}}
+    // {{{ readPostForm()
+
+    /**
+     * 書き込みフォームを読む
+     *
+     * @param string $host
+     * @param string $bbs
+     * @param string $key
+     *
+     * @return string HTTPレスポンスボディ
+     *
+     * @throws P2Exception
+     */
+    public function readPostForm($host, $bbs, $key)
+    {
+        $getData = $this->setupGetData($host, $bbs, $key, $ls);
+        $uri = $this->_rootUri . self::SCRIPT_NAME_POST_FORM;
+        $response = $this->httpGet($uri, $getData, true);
+        $dom = new P2DOM($response['body'], self::$_fallbackEncodings);
+
+        if ($form = $this->getLoginForm($dom)) {
+            if (!$this->login($uri, $getData, $dom, $form, $response)) {
+                throw new P2Exception('Login failed.');
+            }
+        }
+
+        return $response['body'];
+    }
+
+    // }}}
     // {{{ downloadDat()
 
     /**
@@ -363,7 +394,16 @@ class P2Client
         $dom = new P2DOM($html, self::$_fallbackEncodings);
         $form = $this->getPostForm($dom);
         if ($form === null) {
-            throw new P2Exception('Post form not found.');
+            $html = $this->readPostForm($host, $bbs, $key);
+            if ($html === null) {
+                return false;
+            }
+
+            $dom = new P2DOM($html, self::$_fallbackEncodings);
+            $form = $this->getPostForm($dom);
+            if ($form === null) {
+                throw new P2Exception('Post form not found.');
+            }
         }
 
         // POSTするデータを用意。

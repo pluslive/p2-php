@@ -16,7 +16,7 @@
     "pear-pear/benchmark": "1.2.9",
     "pear-pear/cache_lite": "1.7.15",
     "pear-pear/db": "1.7.14",
-    "pear-pear/db_dataobject": "1.10.0",
+    "pear-pear/db_dataobject": "1.11.2",
     "pear-pear/date": "1.4.7",
     "pear-pear/file": "1.4.1",
     "pear-pear/file_util": "1.0.0",
